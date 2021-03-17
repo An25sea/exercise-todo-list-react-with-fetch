@@ -38,23 +38,23 @@ export function Home() {
 
 		await fetch(fetchUrl)
 			.then(response => response.json())
-			.then(fetchBody =>
-				setTarea(
-					fetchBody.map(item => {
+			.then(result =>
+				setFrase(
+					result.map(item => {
 						return { label: item.label, done: item.done };
 					})
 				)
 			)
 			.catch(error => console.log("error", error));
 	};
-	function actualizar(frases) {
+	function insertarpost() {
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
 
-		var raw = JSON.stringify(frases);
+		var raw = JSON.stringify([frases]);
 
 		var requestOptions = {
-			method: "PUT",
+			method: "POST",
 			headers: myHeaders,
 			body: raw,
 			redirect: "follow"
@@ -69,6 +69,46 @@ export function Home() {
 			.catch(error => console.log("error", error));
 	}
 
+	function actualizar(frases) {
+		if (frases.length == 0) {
+			insertarpost();
+		} else {
+			var myHeaders = new Headers();
+			myHeaders.append("Content-Type", "application/json");
+
+			var raw = JSON.stringify(frases);
+
+			var requestOptions = {
+				method: "PUT",
+				headers: myHeaders,
+				body: raw,
+				redirect: "follow"
+			};
+
+			fetch(
+				"https://assets.breatheco.de/apis/fake/todos/user/aaroncalero2",
+				requestOptions
+			)
+				.then(response => response.json())
+				.then(result => console.log(result))
+				.catch(error => console.log("error", error));
+		}
+	}
+	function eliminaralltodo() {
+		var requestOptions = {
+			method: "DELETE",
+			redirect: "follow"
+		};
+
+		fetch(
+			"https://assets.breatheco.de/apis/fake/todos/user/aaroncalero2",
+			requestOptions
+		)
+			.then(response => response.json())
+			.then(result => console.log(""))
+			.catch(error => console.log("error", error));
+		location.reload();
+	}
 	function deleteToDo(i) {
 		frases.splice(i, 1);
 		setFrase([...frases]);
@@ -91,12 +131,16 @@ export function Home() {
 					value={tarea}
 					required
 				/>
-				<div className="listas">{lista}</div>
+				<div className="listas">
+					{lista}
+					{actualizar(frases)}
+				</div>
 				<button className="cleanlist" onClick={e => cleanlist()}>
 					Clean List
 				</button>
 			</div>
 			<section> tienes {frases.length} tareas por completar </section>
+			<i className="fas fa-trash" onClick={eliminaralltodo}></i>
 		</div>
 	);
 }
