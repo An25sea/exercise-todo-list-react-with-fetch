@@ -34,7 +34,7 @@ export function Home() {
 	const getList = async () => {
 		console.log("Entro a get List");
 		let fetchUrl =
-			"https://assets.breatheco.de/apis/fake/todos/user/aaroncalero3";
+			"https://assets.breatheco.de/apis/fake/todos/user/aaroncalero4";
 
 		await fetch(fetchUrl)
 			.then(response => response.json())
@@ -47,7 +47,7 @@ export function Home() {
 			)
 			.catch(error => console.log("error", error));
 	};
-	function insertarpost() {
+	function insertarpost(frases) {
 		var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
 
@@ -61,7 +61,7 @@ export function Home() {
 		};
 
 		fetch(
-			"https://assets.breatheco.de/apis/fake/todos/user/aaroncalero2",
+			"https://assets.breatheco.de/apis/fake/todos/user/aaroncalero4",
 			requestOptions
 		)
 			.then(response => response.text())
@@ -71,11 +71,11 @@ export function Home() {
 
 	function actualizar(frases) {
 		if (frases.length == 0) {
-			insertarpost();
+			insertarpost(frases);
 		} else {
 			var myHeaders = new Headers();
 			myHeaders.append("Content-Type", "application/json");
-
+			insertarpost(frases);
 			var raw = JSON.stringify(frases);
 
 			var requestOptions = {
@@ -86,7 +86,7 @@ export function Home() {
 			};
 
 			fetch(
-				"https://assets.breatheco.de/apis/fake/todos/user/aaroncalero2",
+				"https://assets.breatheco.de/apis/fake/todos/user/aaroncalero4",
 				requestOptions
 			)
 				.then(response => response.json())
@@ -95,13 +95,19 @@ export function Home() {
 		}
 	}
 	function eliminaralltodo() {
+		var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+		var raw = JSON.stringify([]);
+
 		var requestOptions = {
 			method: "DELETE",
+			headers: myHeaders,
+			body: raw,
 			redirect: "follow"
 		};
 
 		fetch(
-			"https://assets.breatheco.de/apis/fake/todos/user/aaroncalero2",
+			"https://assets.breatheco.de/apis/fake/todos/user/aaroncalero4",
 			requestOptions
 		)
 			.then(response => response.json())
@@ -140,7 +146,7 @@ export function Home() {
 				</button>
 			</div>
 			<section> tienes {frases.length} tareas por completar </section>
-			<i className="fas fa-trash" onClick={eliminaralltodo}></i>
+			<i className="fas fa-trash" onClick={e => eliminaralltodo()}></i>
 		</div>
 	);
 }
